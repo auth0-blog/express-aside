@@ -2,6 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const auth0 = require('./auth0');
 
 // configuring Express
 const app = express();
@@ -13,8 +14,8 @@ const contacts = [
     { name: 'Bruno Krebs', phone: '+555133334444' },
     { name: 'John Doe', phone: '+191843243223' }
 ];
-app.get('/contacts', (req, res) => res.send(contacts));
-app.post('/contacts', (req, res) => {
+app.get('/contacts', auth0(['read:contacts']), (req, res) => res.send(contacts));
+app.post('/contacts', auth0(['add:contacts']), (req, res) => {
     contacts.push(req.body);
     res.send();
 });
